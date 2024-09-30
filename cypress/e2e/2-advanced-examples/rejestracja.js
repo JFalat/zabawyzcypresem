@@ -78,8 +78,9 @@ describe('Testowanie funkcji rejestracji użytkownika', () => {
         // Asercja na komunikat o sukcesie
         cy.contains('Your account was created successfully. You are now logged in').should('be.visible').then(() => {
             cy.log('Sprawdzono komunikat o sukcesie');
-          
 
+    //klikanie w logo banku
+            cy.get('img[alt="ParaBank"]').click();
 
         });
     });
