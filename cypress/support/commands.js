@@ -18,3 +18,31 @@ Cypress.Commands.add('submitForm',(firstName, lastName, street, city,state, zipC
 Cypress.Commands.add('submitCheckbox', (check) => {
     cy.get('#soapEndpoint').select('REST');
 });
+
+/**
+ * Uniwersalna metoda do wyboru wartości z dropdowna
+ * @param {string} dropdownSelector - Selector dla dropdowna (select lub input)
+ * @param {string} optionValue - Wartość opcji, którą chcesz wybrać (value w select)
+ * @param {string} [optionText] - Tekst opcji, którą chcesz wybrać (jeśli element ma opcje jako tekst)
+ */
+Cypress.Commands.add('selectFromDropdown', (dropdownSelector, optionValue, optionText) => {
+    cy.get(dropdownSelector).then($dropdown => {
+        const tagName = $dropdown.prop('tagName').toLowerCase();
+
+        if (tagName === 'select') {
+            // Dla <select> elementów
+            cy.get(dropdownSelector).select(optionValue);
+        } else {
+            // Dla custom dropdownów
+            cy.get(dropdownSelector).click(); // Otwieranie dropdowna
+
+            if (optionText) {
+                // Szukaj opcji po tekście
+                cy.contains(optionText).click();
+            } else {
+                // Szukaj opcji po value
+                cy.get(`[value="${optionValue}"]`).click();
+            }
+        }
+    });
+});
