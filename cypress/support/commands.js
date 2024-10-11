@@ -34,31 +34,9 @@ Cypress.Commands.add('submitCheckbox', (check) => {
     cy.get('#soapEndpoint').select('REST');
 });
 
+Cypress.Commands.add('selectFromDropdown', (dropdownSelector, optionValue) => {
+    // Pracujemy tylko z elementami <select>
+    cy.get(dropdownSelector).should('have.prop', 'tagName', 'SELECT')
+        .select(optionValue);  // Wybór opcji na podstawie wartości (value) lub tekstu
 
-Cypress.Commands.add('selectFromDropdown', (dropdownSelector, optionTextOrValue, isValue = false) => {
-    cy.get(dropdownSelector).then($dropdown => {
-        const tagName = $dropdown.prop('tagName').toLowerCase();
-
-        if (tagName === 'select') {
-            // Dla elementów <select>
-            if (isValue) {
-                // Wybór opcji na podstawie atrybutu 'value'
-                cy.get(dropdownSelector).select(optionTextOrValue);
-            } else {
-                // Wybór opcji na podstawie tekstu
-                cy.get(dropdownSelector).select(optionTextOrValue);
-            }
-        } else {
-            // Dla custom dropdownów
-            cy.get(dropdownSelector).click(); // Otwórz dropdown
-
-            if (isValue) {
-                // Szukaj opcji po 'value'
-                cy.get(`[value="${optionTextOrValue}"]`).click();
-            } else {
-                // Szukaj opcji po tekście
-                cy.contains(optionTextOrValue).click();
-            }
-        }
-    });
 });
