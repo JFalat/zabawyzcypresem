@@ -1,53 +1,48 @@
-describe('Sauce Demo - Add to Cart, Checkout and Complete Order', () => {
+describe('Dodanie nowego użytkownika do OrangeHRM', () => {
+    // Używamy gotowej metody logowania w beforeEach
     beforeEach(() => {
-        // Logowanie przed każdym testem
-        cy.loginToSauceDemo();
+        cy.loginToOrangeHRM();  // Poprawna nazwa metody
     });
 
-    it('should add Sauce Labs Backpack to cart, proceed to checkout, click links, and enter details', () => {
-        // Dodanie produktu "Sauce Labs Backpack" do koszyka
-        cy.clickButton('[data-test="add-to-cart-sauce-labs-backpack"]');
+    it('Przechodzi na stronę systemowych użytkowników i dodaje nowego użytkownika', () => {
+        // Przejdź na stronę systemowych użytkowników
+        cy.visitPage('https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewSystemUsers');
 
-        // Przejście do koszyka
-        cy.clickButton('.shopping_cart_link');
+        // Zweryfikuj, że strona systemowych użytkowników jest widoczna
+        cy.contains('System Users').should('be.visible');
 
-        // Sprawdzenie, czy użytkownik został przeniesiony na stronę koszyka
-        cy.url().should('include', '/cart.html');
+        // Kliknij przycisk "Add"
+        cy.get('button[class*="oxd-button--secondary"]').first().click();
 
-        // Przejście do checkout
-        cy.clickButton('[data-test="checkout"]');
+        // Poczekaj, aż dropdowny staną się widoczne
+        cy.get('.oxd-select-text-input', { timeout: 10000 }).should('be.visible');
 
-        // Sprawdzenie, czy użytkownik został przeniesiony na stronę checkout step one
-        cy.url().should('include', '/checkout-step-one.html');
+        // Wybór roli użytkownika (Admin)
+        cy.get('div.oxd-select-text').first().click();  // Otwórz dropdown dla roli użytkownika
+        cy.contains('Admin').click();  // Wybierz "Admin"
 
-        // Wprowadzenie danych użytkownika w formularzu checkout
-        cy.enterText('[data-test="firstName"]', 'John');
-        cy.enterText('[data-test="lastName"]', 'Doe');
-        cy.enterText('[data-test="postalCode"]', '12345');
+        // Wybór statusu (Enabled/Disabled)
+        cy.get('div.oxd-select-text').eq(1).click();  // Otwórz dropdown dla statusu
+        cy.contains('Enabled').click();  // Wybierz "Enabled"
 
-        // Kliknięcie przycisku "Continue"
-        cy.clickButton('[data-test="continue"]');
+        // // Wprowadzenie danych nowego użytkownika
+        // Wyszukaj element input na podstawie placeholdera i użyj cy.enterText
+        cy.enterText('input[placeholder="Type for hints..."]', 'Paul Collings');
+        cy.wait(2000);
+        cy.get('input[autocomplete="off"]', { timeout: 10000 })
+            .eq(0) // Wybiera pierwsze pole
+            .should('be.visible')
+            .clear()
+            .type('wprowadzony tekst');
 
-        // Sprawdzenie, czy użytkownik został przeniesiony na stronę checkout step two
-        cy.url().should('include', '/checkout-step-two.html');
-
-        // Finalizacja zakupu - kliknięcie przycisku "Finish"
-        cy.clickButton('[data-test="finish"]');
-
-        // Sprawdzenie, czy użytkownik został przeniesiony na stronę potwierdzenia zamówienia
-        cy.url().should('include', '/checkout-complete.html');
-
-        // Oczekiwanie na pojawienie się tekstu potwierdzającego zamówienie
-        cy.contains('h2', 'Thank you for your order!', { timeout: 10000 }).should('be.visible');
-
-        // Kliknięcie w trzy kreski, aby otworzyć menu
-        cy.clickButton('#react-burger-menu-btn');
-
-        // Wywołanie metody clickLink do kliknięcia w link "About"
-        cy.get('#about_sidebar_link').should('be.visible').click({ timeout: 10000 });
-
-        // cy.clickLink('#about_sidebar_link', { timeout: 120000 }).should('be.visible');
-
-
+        // // Wprowadzenie hasła
+        cy.enterText('input[name="password"]', 'UserPassword123');  // Hasło
+        cy.enterText('input[name="confirmPassword"]', 'UserPassword123');  // Potwierdzenie hasła
+        //
+        // // Zapisanie nowego użytkownika
+        // cy.clickButton('button[type="submit"]');  // Przycisk "Save"
+        //
+        // // Sprawdzenie komunikatu o sukcesie
+        // cy.contains('Successfully Saved').should('be.visible');
     });
 });
