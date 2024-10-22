@@ -23,7 +23,7 @@ Cypress.Commands.add('enterText', (inputSelector, text) => {
     // Wyszukiwanie pola tekstowego na podstawie selektora i wpisanie tekstu
     cy.get(inputSelector).clear().type(text);
 });
-
+// kjfksd
 Cypress.Commands.add('clickLink', (linkSelector) => {
     cy.get(linkSelector).click();
 });
