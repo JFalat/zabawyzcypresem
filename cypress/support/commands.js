@@ -34,3 +34,11 @@ Cypress.Commands.add('selectFromDropdown', (dropdownSelector, optionText) => {
     // Wybierz opcję z dropdowna na podstawie jej tekstu
     cy.get('div[role="listbox"]').contains(optionText).click();
 });
+
+Cypress.Commands.add('enterTextToDataVField', (text) => {
+    cy.get('input[data-v-75e744cd]')
+        .should('be.visible')
+        .clear()
+        .type(text);
+
+});
