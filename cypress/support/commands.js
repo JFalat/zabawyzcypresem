@@ -14,31 +14,44 @@ Cypress.Commands.add('visitPage', (url) => {
     cy.url().should('include', url.split('/').pop());
 });
 
-Cypress.Commands.add('clickButton', (buttonSelector) => {
-    // Kliknięcie przycisku na podstawie selektora
-    cy.get(buttonSelector).click();
+Cypress.Commands.add('clickButton', (containerSelector, buttonSelector, index = 0) => {
+    // Kliknij przycisk o podanym indeksie, który jest dzieckiem określonego kontenera
+    cy.get(`${containerSelector} ${buttonSelector}`).eq(index).click();
 });
 
 Cypress.Commands.add('enterText', (inputSelector, text) => {
     // Wyszukiwanie pola tekstowego na podstawie selektora i wpisanie tekstu
     cy.get(inputSelector).clear().type(text);
 });
-// kjfksd
-Cypress.Commands.add('clickLink', (linkSelector) => {
-    cy.get(linkSelector).click();
-});
+
 Cypress.Commands.add('selectFromDropdown', (dropdownSelector, optionText) => {
     // Kliknij dropdown, aby go otworzyć
-    cy.get(dropdownSelector).click();
+    cy.get(dropdownSelector).first().click();
 
     // Wybierz opcję z dropdowna na podstawie jej tekstu
-    cy.get('div[role="listbox"]').contains(optionText).click();
+    cy.get('div[role="listbox"] option, div.oxd-select-dropdown').click();
 });
 
-Cypress.Commands.add('enterTextToDataVField', (text) => {
-    cy.get('input[data-v-75e744cd]')
+
+Cypress.Commands.add('clickButton', (containerSelector) => {
+    // Kliknij przycisk, który jest dzieckiem określonego kontenera
+    cy.get(`${containerSelector}`).click();
+});
+Cypress.Commands.add('enterTextByLabel', (labelText, text) => {
+    cy.contains('label', labelText, { timeout: 10000 })  // Zwiększamy timeout
         .should('be.visible')
+        .parents('div')
+        .find('input', { timeout: 10000 })               // Zwiększamy timeout również dla input
+        .should('exist')
         .clear()
         .type(text);
-
 });
+// Dodajemy niestandardową komendę do Cypress
+Cypress.Commands.add('selectFromListbox', (dropdownSelector, optionText) => {
+    // Kliknij dropdown, aby wyświetlić opcje
+    cy.get(dropdownSelector).click();
+
+    // Wybierz opcję po jej tekście
+    cy.get(`[role='option']`).contains(optionText).click();
+});
+
