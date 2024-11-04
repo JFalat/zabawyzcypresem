@@ -23,13 +23,24 @@ Cypress.Commands.add('enterText', (inputSelector, text) => {
     // Wyszukiwanie pola tekstowego na podstawie selektora i wpisanie tekstu
     cy.get(inputSelector).clear().type(text);
 });
-
+//test
 Cypress.Commands.add('selectFromDropdown', (dropdownSelector, optionText) => {
     // Kliknij dropdown, aby go otworzyć
     cy.get(dropdownSelector).first().click();
 
     // Wybierz opcję z dropdowna na podstawie jej tekstu
     cy.get('div[role="listbox"] option, div.oxd-select-dropdown').click();
+});
+Cypress.Commands.add('selectFirstFromDropdown2', (dropdownSelector) => {
+    // Kliknij dropdown, aby go otworzyć
+    cy.get(dropdownSelector).first().click();
+
+    // Znajdź pierwszy element z listy rozwijanej i kliknij go
+    cy.get('div[role="listbox"] option, div.oxd-select-dropdown, .oxd-autocomplete-wrapper')
+        .find('div, option') // Szuka elementów wewnątrz listy rozwijanej
+        .first()
+        .should('be.visible')
+        .click();
 });
 
 

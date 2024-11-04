@@ -26,21 +26,17 @@ describe('Dodanie nowego użytkownika do OrangeHRM', () => {
         // Wpisanie Employee Name
         cy.enterText('.oxd-autocomplete-text-input > input','%')
         cy.wait(10000);  // Daj czas na pojawienie się sugestii
-        cy.selectFromDropdown("[role='listbox'] [role='option']").first().click();
-
+        cy.selectFirstFromDropdown2('class="class="oxd-autocomplete-wrapper"')//test
         //Wpisanie UserName
-        // const randomText = Math.random().toString(36).substring(7);  // Generuje losowy ciąg znaków
-        // cy.get(':nth-child(4) > .oxd-input-group > :nth-child(2) > .oxd-input').type(randomText)
-        // cy.enterText(':nth-child(4) > .oxd-input-group > :nth-child(2) > .oxd-input', 'randomText')
+        const randomText = Math.random().toString(36).substring(7);  // Generuje losowy ciąg znaków
+        cy.enterText(':nth-child(4) > .oxd-input-group > :nth-child(2) > .oxd-input', randomText)
 
-        // // Wpisz hasło "Admin123"
-        // cy.get('.user-password-cell > .oxd-input-group > :nth-child(2) > .oxd-input').type('Admin123');
-        // cy.enterText('.user-password-cell > .oxd-input-group > :nth-child(2) > .oxd-input','Admin123')
-        //
-        // // Potwierdź hasło
-        // cy.get(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input').type('Admin123');
-        // cy.enterText(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input','Admin123')
-        //
+        // Wpisz hasło "Admin123"
+        cy.enterText('.user-password-cell > .oxd-input-group > :nth-child(2) > .oxd-input','Admin123')
+
+        // Potwierdź hasło
+        cy.enterText(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input','Admin123')
+
         // // Save
         // cy.get('.oxd-button--secondary').click()
     });
